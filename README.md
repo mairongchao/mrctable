@@ -4,7 +4,7 @@
 控件依赖于外部laypage分布控件，[laypage控件](https://www.layui.com/laypage/)<br/>
 控件依赖于样式css/style.css和css/base.css
 ## 效果图
-![](https://github.com/tsmairc/mrctable/blob/master/effect.png)  
+![](https://github.com/tsmairc/mrctable/blob/master/effected.png)  
 ## 具体用法
 * 具体的html代码
 ```html
