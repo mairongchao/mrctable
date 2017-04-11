@@ -37,9 +37,9 @@ columns : [
  }}],
  onLoad: function(){}
 };
-$("#testList").ztable(options);
+$("#testList").mrctable(options);
 //为table行赋值,row为后面返回来的json数据
-$("#testList").ztable("loadData", rows)
+$("#testList").mrctable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
 控件的实始化的流程是1.根据传进options初始化表头2.利用冒泡去绑定行事件<br/>
@@ -48,11 +48,11 @@ $("#testList").ztable("loadData", rows)
 ```javascript
 //判断第一个参数是否为字符串，如不是则去执行控件内部的方法
 if(typeof options == "string"){
-    if(!_self.data("ztable")){
+    if(!_self.data("mrctable")){
         //没初始化，不执行
 	return null;
     }			
-    var method = $.fn.ztable.methods[options];
+    var method = $.fn.mrctable.methods[options];
 	if($.isFunction(method)){
 	    return method(_self, params);
 	}
@@ -69,7 +69,7 @@ jq.delegate("tbody tr", "click", function(){
         return;
     }
     var index, row;
-    var options = $.fn.ztable.methods.options(jq);
+    var options = $.fn.mrctable.methods.options(jq);
     if($(this).find(".inp-checkbox-label").hasClass("active")){
         //已经选中，取消
         $(this).find(".inp-checkbox-label").removeClass("active");
@@ -85,7 +85,7 @@ jq.delegate("tbody tr", "click", function(){
 		//触发取消选中事件
 		if($.isFunction(options.onUnSelect)){
 			index = $(this).index();
-			row = $.fn.ztable.methods.findData(jq, index);
+			row = $.fn.mrctable.methods.findData(jq, index);
 			options.onUnSelect(index, row);
 		}
 	}
@@ -105,7 +105,7 @@ jq.delegate("tbody tr", "click", function(){
 		if(!options.singleSelect){
 			//如果是多选，全部选中后设置全选
 			var checkboxs = jq.find("tbody .inp-checkbox-label.active");
-			if(checkboxs.size() == $.fn.ztable.methods.getData(jq).length){
+			if(checkboxs.size() == $.fn.mrctable.methods.getData(jq).length){
 				jq.find("thead .inp-checkbox-label").addClass("active");//全选复选框
 				jq.find("thead .inp-checkbox-label input[type=checkbox]").prop("checked", true);
 			}
@@ -114,7 +114,7 @@ jq.delegate("tbody tr", "click", function(){
 		//触发选中事件
 		if($.isFunction(options.onSelect)){
 			index = $(this).index();
-			row = $.fn.ztable.methods.findData(jq, index);
+			row = $.fn.mrctable.methods.findData(jq, index);
 			options.onSelect(index, row);
 		}
 	}
@@ -124,15 +124,15 @@ jq.delegate("tbody tr", "click", function(){
  这里主要对有时候停留在其它页，而没有数据的处理，利用递归向前翻页
  ```javascript
 if(!data){
-    $.fn.ztable.methods.loadData(jq, []);
+    $.fn.mrctable.methods.loadData(jq, []);
 }
 else{
     if(data.rows.length > 0){
-        $.fn.ztable.methods.loadData(jq, data);
+        $.fn.mrctable.methods.loadData(jq, data);
     }
     else{
         if(options.param.page == 1){
-            $.fn.ztable.methods.loadData(jq, data);
+            $.fn.mrctable.methods.loadData(jq, data);
         }
         else{
 	    //当前页没有数据，且不是第一页，递归调用当前函数，跳转到上一页
@@ -150,7 +150,7 @@ else{
  //jq为当前行tr的jquery对象
 getSelected: function(jq){
     var results = [];
-    var rows = $.fn.ztable.methods.getData(jq);//获取当前页所有数据
+    var rows = $.fn.mrctable.methods.getData(jq);//获取当前页所有数据
     //遍历tbody所有的tr节点，当根据当前选中行的下标去从rows中拿数据，选中tr会有一个active的class
     jq.find("tbody .inp-checkbox-label").each(function(i, object){
         if($(object).hasClass("active")){

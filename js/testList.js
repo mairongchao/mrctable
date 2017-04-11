@@ -29,10 +29,10 @@
 						],
 				onLoad: me.initTableEvent
 			};
-			$("#testList").ztable(options);
+			$("#testList").mrctable(options);
 		},
 		queryTabel: function(){
-			$("#testList").ztable("loadData", data);
+			$("#testList").mrctable("loadData", data);
 		},
 		initTableEvent: function(){
 			$(".btn_detail").bind("click", function(){
@@ -41,12 +41,12 @@
 			
 			$(".btn_del").bind("click", function(){
 				var tr = $(this).closest("tr");
-				$("#testList").ztable("delData", tr);
+				$("#testList").mrctable("delData", tr);
 			});
 		},
 		initEvent: function(){
 			$("#btn_new_row").bind("click", function(){
-				$("#testList").ztable("addData", row);
+				$("#testList").mrctable("addData", row);
 			});
 		}
 	});

@@ -10,7 +10,7 @@
  *	</div>
  */
 (function($){
-	$.fn.ztable = function(options, params){
+	$.fn.mrctable = function(options, params){
 		var _self = this;
 		//需求table标签
 		if (!_self.is("table")){
@@ -19,12 +19,12 @@
 		
 		//执行方法
 		if(typeof options == "string"){
-			if(!_self.data("ztable")){
+			if(!_self.data("mrctable")){
 				//没初始化，不执行
 				return null;
 			}
 			
-			var method = $.fn.ztable.methods[options];
+			var method = $.fn.mrctable.methods[options];
 			if($.isFunction(method)){
 				return method(_self, params);
 			}
@@ -37,14 +37,14 @@
 		return _self.each(function(){
 			//根据属性初始化
 			//$(this).html("");
-			var data = $(this).data("ztable");
+			var data = $(this).data("mrctable");
 			if(data){
 				data.options = $.extend(data.options, options);
 			}
 			else{
 				//覆盖默认属性
-				options = $.extend({}, $.fn.ztable.defaults, options);
-				$(this).data("ztable", {options: options});
+				options = $.extend({}, $.fn.mrctable.defaults, options);
+				$(this).data("mrctable", {options: options});
 			}
 			
 			render($(this));
@@ -53,7 +53,7 @@
 		
 		/**渲染表格*/
 		function render(jq){
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			var columns = options.columns;
 			
 			var html = [];
@@ -107,7 +107,7 @@
 					return;
 				}
 				var index, row;
-				var options = $.fn.ztable.methods.options(jq);
+				var options = $.fn.mrctable.methods.options(jq);
 				if($(this).find(".inp-checkbox-label").hasClass("active")){
 					//已经选中，取消
 					$(this).find(".inp-checkbox-label").removeClass("active");
@@ -123,7 +123,7 @@
 					//触发取消选中事件
 					if($.isFunction(options.onUnSelect)){
 						index = $(this).index();
-						row = $.fn.ztable.methods.findData(jq, index);
+						row = $.fn.mrctable.methods.findData(jq, index);
 						options.onUnSelect(index, row);
 					}
 				}
@@ -143,7 +143,7 @@
 					if(!options.singleSelect){
 						//如果是多选，全部选中后设置全选
 						var checkboxs = jq.find("tbody .inp-checkbox-label.active");
-						if(checkboxs.size() == $.fn.ztable.methods.getData(jq).length){
+						if(checkboxs.size() == $.fn.mrctable.methods.getData(jq).length){
 							jq.find("thead .inp-checkbox-label").addClass("active");//全选复选框
 							jq.find("thead .inp-checkbox-label input[type=checkbox]").prop("checked", true);
 						}
@@ -152,7 +152,7 @@
 					//触发选中事件
 					if($.isFunction(options.onSelect)){
 						index = $(this).index();
-						row = $.fn.ztable.methods.findData(jq, index);
+						row = $.fn.mrctable.methods.findData(jq, index);
 						options.onSelect(index, row);
 					}
 				}
@@ -171,10 +171,10 @@
 			//全选复选框
 			jq.find("thead .inp-checkbox-label").click(function(){
 				if($(this).hasClass("active")){
-					$.fn.ztable.methods.unSelectAll(jq);
+					$.fn.mrctable.methods.unSelectAll(jq);
 				}
 				else{
-					$.fn.ztable.methods.selectAll(jq);
+					$.fn.mrctable.methods.selectAll(jq);
 				}
 				
 				return false;
@@ -182,9 +182,9 @@
 		}
 	};
 	
-	$.fn.ztable.methods = {
+	$.fn.mrctable.methods = {
 		options: function(jq){
-			return jq.data("ztable").options || {};
+			return jq.data("mrctable").options || {};
 		},
 		/**跳到某页*/
 		gotoPage: function(jq, page){
@@ -193,7 +193,7 @@
 				return;
 			}
 			
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			if(!options.url){
 				return;
 			}
@@ -221,15 +221,15 @@
 				},
 				success: function(data){
 					if(!data){
-						$.fn.ztable.methods.loadData(jq, []);
+						$.fn.mrctable.methods.loadData(jq, []);
 					}
 					else{
 						if(data.rows.length > 0){
-							$.fn.ztable.methods.loadData(jq, data);
+							$.fn.mrctable.methods.loadData(jq, data);
 						}
 						else{
 							if(options.param.page == 1){
-								$.fn.ztable.methods.loadData(jq, data);
+								$.fn.mrctable.methods.loadData(jq, data);
 							}
 							else{
 								//当前页没有数据，且不是第一页，递归调用当前函数，跳转到上一页
@@ -243,15 +243,15 @@
 			
 			Invoker.async(action, method, options.param, function(data){
 				if(!data){
-					$.fn.ztable.methods.loadData(jq, []);
+					$.fn.mrctable.methods.loadData(jq, []);
 				}
 				else{
 					if(data.rows.length > 0){
-						$.fn.ztable.methods.loadData(jq, data);
+						$.fn.mrctable.methods.loadData(jq, data);
 					}
 					else{
 						if(options.param.page == 1){
-							$.fn.ztable.methods.loadData(jq, data);
+							$.fn.mrctable.methods.loadData(jq, data);
 						}
 						else{
 							//当前页没有数据，且不是第一页，递归调用当前函数，跳转到上一页
@@ -264,19 +264,19 @@
 		/**以param为参数加载第一页数据*/
 		load: function(jq, param){
 			//刷新dataTable数据
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			options.param = param || {};
-			$.fn.ztable.methods.gotoPage(jq, 1);
+			$.fn.mrctable.methods.gotoPage(jq, 1);
 		},
 		/**重新加载当前页的数据*/
 		reload: function(jq){
-			var options = $.fn.ztable.methods.options(jq);
-			$.fn.ztable.methods.gotoPage(jq, options.pageNumber);
+			var options = $.fn.mrctable.methods.options(jq);
+			$.fn.mrctable.methods.gotoPage(jq, options.pageNumber);
 		},
 		/**在表格中渲染数据*/
 		loadData: function(jq, data){
 			//data格式可以是数组，也可以是{total: n, rows: [{key1: value1, key2: value2}, ...]}
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			
 			jq.find("tbody").empty();
 			
@@ -364,7 +364,7 @@
 					skip: true,//跳页
 					jump: function(obj, first){//触发分页后的回调
 						if(!first){//点击跳页触发函数自身，并传递当前页：obj.curr
-							$.fn.ztable.methods.gotoPage(jq, obj.curr);
+							$.fn.mrctable.methods.gotoPage(jq, obj.curr);
 						}
 					}
 				});
@@ -378,7 +378,7 @@
 		/**获取选中的数据*/
 		getSelected: function(jq){
 			var results = [];
-			var rows = $.fn.ztable.methods.getData(jq);//所有数据
+			var rows = $.fn.mrctable.methods.getData(jq);//所有数据
 			jq.find("tbody .inp-checkbox-label").each(function(i, object){
 				if($(object).hasClass("active")){
 					results.push(rows[i]);
@@ -393,7 +393,7 @@
 		},
 		/**查询指定数据，select可以是行tr、数据id、行索引*/
 		findData: function(jq, selector){
-			var rows = $.fn.ztable.methods.getData(jq);//所有数据
+			var rows = $.fn.mrctable.methods.getData(jq);//所有数据
 			var index;
 			if((selector instanceof jQuery) && selector.is("tr")){
 				//selector是行的tr
@@ -421,16 +421,16 @@
 		/**添加记录*/
 		addData: function(jq, row){
 			//得到所有行数据
-			var rows = $.fn.ztable.methods.getData(jq);//所有数据
+			var rows = $.fn.mrctable.methods.getData(jq);//所有数据
 			rows.push(row);
 			//重新加载列表
-			$.fn.ztable.methods.loadData(jq, rows);
+			$.fn.mrctable.methods.loadData(jq, rows);
 		},
 		/**删除记录*/
 		delData: function(jq, selector){
 			var delIndex = -1;
 			var index;
-			var rows = $.fn.ztable.methods.getData(jq);//所有数据
+			var rows = $.fn.mrctable.methods.getData(jq);//所有数据
 			if((selector instanceof jQuery) && selector.is("tr")){
 				//selector是行的tr
 				index = selector.index();
@@ -454,7 +454,7 @@
 			
 			if(delIndex != -1){
 				rows.splice(delIndex, 1);
-				$.fn.ztable.methods.loadData(jq, rows);
+				$.fn.mrctable.methods.loadData(jq, rows);
 			}
 		},
 		/**设置全选*/
@@ -469,9 +469,9 @@
 			jq.find("tbody .inp-checkbox-label input[type=checkbox]").prop("checked", true);
 			
 			//触发全选事件
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			if($.isFunction(options.onSelectAll)){
-				var rows = $.fn.ztable.methods.getData(jq);
+				var rows = $.fn.mrctable.methods.getData(jq);
 				options.onSelectAll(rows);
 			}
 		},
@@ -487,9 +487,9 @@
 			jq.find("tbody .inp-checkbox-label input[type=checkbox]").prop("checked", false);
 			
 			//触发取消全选事件
-			var options = $.fn.ztable.methods.options(jq);
+			var options = $.fn.mrctable.methods.options(jq);
 			if($.isFunction(options.onUnSelectAll)){
-				var rows = $.fn.ztable.methods.getData(jq);
+				var rows = $.fn.mrctable.methods.getData(jq);
 				options.onUnSelectAll(rows);
 			}
 		},
@@ -522,7 +522,7 @@
 	};
 	
 	//默认属性
-	$.fn.ztable.defaults = $.extend({}, {
+	$.fn.mrctable.defaults = $.extend({}, {
 		pageNumber: 1,//当前页
 		pageSize: 10,//每页多少数据
 		columns: [],//定义表头对象{field: "属性名", title: "表头描述", width: "10%", align:"left、center、right", code: "静态数据编码", formatter: function(value, row, index){}}
