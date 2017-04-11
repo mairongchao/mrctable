@@ -17,9 +17,9 @@
 ```
 * 具体的javascript代码
 ```javascript
-  //初始化table控件,描绘table的th
-  $("#testList").ztable();
-  //为table行赋值,row为后面返回来的json数据
-  $("#testList").ztable("loadData", rows)
+//初始化table控件,描绘table的th
+$("#testList").ztable();
+//为table行赋值,row为后面返回来的json数据
+$("#testList").ztable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
