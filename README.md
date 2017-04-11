@@ -3,6 +3,8 @@
 大致用法参考 [datagrid使用](http://www.jeasyui.net/plugins/183.html)<br/>
 控件依赖于外部laypage分布控件，[laypage控件](https://www.layui.com/laypage/)<br/>
 控件依赖于样式css/style.css和css/base.css
+## 效果图
+![](https://github.com/tsmairc/mrctable/effect.png)  
 ## 具体用法
 * 具体的html代码
 ```html
@@ -41,18 +43,18 @@ $("#testList").ztable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
 内部一些代码介绍：<br/>
+以下这段代码，主要是区分控件初始化与执行控件内部方法的处理<br/>
 ```javascript
 if(typeof options == "string"){
-			if(!_self.data("ztable")){
-				//没初始化，不执行
-				return null;
-			}
-			
-			var method = $.fn.ztable.methods[options];
-			if($.isFunction(method)){
-				return method(_self, params);
-			}
-
-			return null;
-		}
-  ```
+    if(!_self.data("ztable")){
+        //没初始化，不执行
+	return null;
+    }			
+    var method = $.fn.ztable.methods[options];
+	if($.isFunction(method)){
+	    return method(_self, params);
+	}
+        return null;
+    }
+ }
+ ```
