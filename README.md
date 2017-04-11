@@ -1,0 +1,1 @@
+# mrctable是基本当前我的需求开发的一个jquery table控件，开发思路基本跟easyui的datagrid差不多。
