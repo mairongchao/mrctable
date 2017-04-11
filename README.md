@@ -7,13 +7,13 @@
 * 具体的html代码
 ```html
 <div class="search-list">
- 		<table id="testList"></table>
+ <table id="testList"></table>
+</div>
+<div class="search-foot">
+ <div class="search-pull-right">
+  <div class="search-page"></div>
  </div>
- <div class="search-foot">
- 	<div class="search-pull-right">
- 	<div class="search-page"></div>
- 	</div>
- </div>
+</div>
 ```
 * 具体的javascript代码
 ```javascript
