@@ -18,8 +18,26 @@
 * 具体的javascript代码
 ```javascript
 //初始化table控件,描绘table的th
-$("#testList").ztable();
+var options = {
+pageSize : 5,
+pagination : true,
+singleSelect : false,
+param : {},
+idField : "test_id",
+columns : [
+ {field : "test_id", title : "id", width : "13%"},
+ {field : "test1", title : "测试1", width : "15%"},
+ {field : "test2", title : "测试2", width : "15%"},
+ {field : "test3", title : "测试3", code : "STATUS_CD", width : "10%"},
+ {field : "test4", title : "测试4", width : "25%"},
+ {field : "control", title : "操作", width : "15%", formatter : function(value, rowData, rowIndex) {
+  return "<a href='javascript:void(0)' class='ctrl btn_detail'>详情</a>";
+ }}],
+ onLoad: function(){}
+};
+$("#testList").ztable(options);
 //为table行赋值,row为后面返回来的json数据
 $("#testList").ztable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
+
