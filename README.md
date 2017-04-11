@@ -42,9 +42,11 @@ $("#testList").ztable(options);
 $("#testList").ztable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
+控件的实始化的流程是1.根据传进options初始化表头2.利用冒泡去绑定行事件<br/>
 内部一些代码介绍：<br/>
 以下这段代码，主要是区分控件初始化与执行控件内部方法的处理<br/>
 ```javascript
+//判断第一个参数是否为字符串，如不是则去执行控件内部的方法
 if(typeof options == "string"){
     if(!_self.data("ztable")){
         //没初始化，不执行
@@ -58,3 +60,105 @@ if(typeof options == "string"){
     }
  }
  ```
+ 下面介绍利用冒泡绑定行事件<br/>
+ ```javascript
+ //行点击事件处理
+jq.delegate("tbody tr", "click", function(){
+    //如果当前行是显示没有数据的行时，不处理
+    if($(this).hasClass("empty-row")){
+        return;
+    }
+    var index, row;
+    var options = $.fn.ztable.methods.options(jq);
+    if($(this).find(".inp-checkbox-label").hasClass("active")){
+        //已经选中，取消
+        $(this).find(".inp-checkbox-label").removeClass("active");
+		$(this).find(".inp-checkbox-label input[type=checkbox]").prop("checked", false);
+		$(this).css({"background-color": ""});
+
+		if(!options.singleSelect){
+			//取消全选
+			jq.find("thead .inp-checkbox-label").removeClass("active");
+			jq.find("thead .inp-checkbox-label input[type=checkbox]").prop("checked", false);
+		}
+
+		//触发取消选中事件
+		if($.isFunction(options.onUnSelect)){
+			index = $(this).index();
+			row = $.fn.ztable.methods.findData(jq, index);
+			options.onUnSelect(index, row);
+		}
+	}
+	else{
+		if(options.singleSelect){
+			//如果是单选，先取消其他选中
+			jq.find(".inp-checkbox-label").removeClass("active");
+			jq.find(".inp-checkbox-label input[type=checkbox]").prop("checked", false);
+			jq.find("tbody tr").css({"background-color": ""});
+		}
+
+		//选中当前
+		$(this).find(".inp-checkbox-label").addClass("active");
+		$(this).find(".inp-checkbox-label input[type=checkbox]").prop("checked", true);
+		$(this).css({"background-color": "#f5f5f5"});
+
+		if(!options.singleSelect){
+			//如果是多选，全部选中后设置全选
+			var checkboxs = jq.find("tbody .inp-checkbox-label.active");
+			if(checkboxs.size() == $.fn.ztable.methods.getData(jq).length){
+				jq.find("thead .inp-checkbox-label").addClass("active");//全选复选框
+				jq.find("thead .inp-checkbox-label input[type=checkbox]").prop("checked", true);
+			}
+		}
+
+		//触发选中事件
+		if($.isFunction(options.onSelect)){
+			index = $(this).index();
+			row = $.fn.ztable.methods.findData(jq, index);
+			options.onSelect(index, row);
+		}
+	}
+});
+ ```
+ 下面介绍跳页方法gotoPage的片段：<br/>
+ 这里主要对有时候停留在其它页，而没有数据的处理，利用递归向前翻页
+ ```javascript
+if(!data){
+    $.fn.ztable.methods.loadData(jq, []);
+}
+else{
+    if(data.rows.length > 0){
+        $.fn.ztable.methods.loadData(jq, data);
+    }
+    else{
+        if(options.param.page == 1){
+            $.fn.ztable.methods.loadData(jq, data);
+        }
+        else{
+	    //当前页没有数据，且不是第一页，递归调用当前函数，跳转到上一页
+            arg.callee(jq, page - 1);
+        }
+    }
+}
+ ```
+ 下面介绍loadData方法思路<br/>
+ 这里的思路主要是首先清空当前的tbody，然后利用jquery的data方法，向当前的控件节点加上要显示的数据,<br/>
+ 然后遍历当前rows，向tbody加上数据行，再进行分页处理。
+ 下面介绍getSelected方法，该方法主要获取选中行数据<br/>
+ ```javascript
+ /**获取选中的数据*/
+ //jq为当前行tr的jquery对象
+getSelected: function(jq){
+    var results = [];
+    var rows = $.fn.ztable.methods.getData(jq);//获取当前页所有数据
+    //遍历tbody所有的tr节点，当根据当前选中行的下标去从rows中拿数据，选中tr会有一个active的class
+    jq.find("tbody .inp-checkbox-label").each(function(i, object){
+        if($(object).hasClass("active")){
+	    results.push(rows[i]);
+	}
+    });
+    return results;
+}
+ ```
+ 
+ 
