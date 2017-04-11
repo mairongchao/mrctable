@@ -40,4 +40,19 @@ $("#testList").ztable(options);
 $("#testList").ztable("loadData", rows)
 ```
 ## 一些常用功能参数控件内部代码
+内部一些代码介绍：<br/>
+```javascript
+if(typeof options == "string"){
+			if(!_self.data("ztable")){
+				//没初始化，不执行
+				return null;
+			}
+			
+			var method = $.fn.ztable.methods[options];
+			if($.isFunction(method)){
+				return method(_self, params);
+			}
 
+			return null;
+		}
+  ```
