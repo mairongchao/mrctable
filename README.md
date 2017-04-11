@@ -143,8 +143,8 @@ else{
  ```
  下面介绍loadData方法思路<br/>
  这里的思路主要是首先清空当前的tbody，然后利用jquery的data方法，向当前的控件节点加上要显示的数据,<br/>
- 然后遍历当前rows，向tbody加上数据行，再进行分页处理。
- 下面介绍getSelected方法，该方法主要获取选中行数据<br/>
+ 然后遍历当前rows，向tbody加上数据行，再进行分页处理。<br/>
+ 下面介绍getSelected方法，该方法主要获取选中行数据
  ```javascript
  /**获取选中的数据*/
  //jq为当前行tr的jquery对象
