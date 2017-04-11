@@ -28,7 +28,7 @@ columns : [
  {field : "test_id", title : "id", width : "13%"},
  {field : "test1", title : "测试1", width : "15%"},
  {field : "test2", title : "测试2", width : "15%"},
- {field : "test3", title : "测试3", code : "STATUS_CD", width : "10%"},
+ {field : "test3", title : "测试3", width : "10%"},
  {field : "test4", title : "测试4", width : "25%"},
  {field : "control", title : "操作", width : "15%", formatter : function(value, rowData, rowIndex) {
   return "<a href='javascript:void(0)' class='ctrl btn_detail'>详情</a>";
