@@ -1,7 +1,7 @@
 # mrctable是一个jquery table控件
 其开发思路基本跟easyui的datagrid差不多，依赖jquery1.7以上。<br/>
 大致用法参考 [datagrid使用](http://www.jeasyui.net/plugins/183.html)<br/>
-控件依赖于外部laypage分布控件，[laypage控件](https://www.layui.com/laypage/)<br/>
+控件依赖于外部laypage分页控件，[laypage控件](https://www.layui.com/laypage/)<br/>
 控件依赖于样式css/style.css和css/base.css
 ## 效果图
 ![](https://github.com/tsmairc/mrctable/blob/master/effected.png)  
